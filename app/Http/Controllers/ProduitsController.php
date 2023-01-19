@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Produit;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 
 class ProduitsController extends Controller
@@ -12,26 +13,31 @@ class ProduitsController extends Controller
         return response()->json(Produit::all());
     }
 	
+    function listeInfo(){
+		$produitListe = Produit::all();
+		return view('produits', ['produitListe' => $produitListe]);
+    }
+
 	function detail($id){
 		return response()->json(Produit::find($id));
 	}
 
 	function listeProduitsDeviseEuros($id){
 		$produit = Produit::where('id', $id)->first();
-		$prixProd = $produit['prix'] * 1;
-		return $prixProd;
+		$produit->prix*=1.08;
+		return $produit;
 	}
 
 	function listeProduitsDeviseUSD($id){
 		$produit = Produit::where('id', $id)->first();
-		$prixProd = $produit['prix'] * 1.08;
-		return $prixProd;
+		$produit->prix*=1.08;
+		return $produit;
 	}
 
 	function listeProduitsDeviseBTC($id){
 		$produit = Produit::where('id', $id)->first();
-		$prixProd = $produit['prix'] * 0.000052;
-		return $prixProd;
+		$produit->prix*=0.000052;
+		return $produit;
 	}
 
 	function ajouter(Request $request){
